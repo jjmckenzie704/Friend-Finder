@@ -21,9 +21,10 @@ app.get("/", function(req, res) {
 
 //Basic route to go to the reserve page
 app.get("/survey", function(req, res) {
-  res.sendFile(path.json(__dirname, "./app/public/survey.html"))
+  res.sendFile(path.join(__dirname, "./app/public/survey.html"))
 })
 
+require("./app/routing/apiRoutes")(app);
 
 // Listener
 // ===========================================================

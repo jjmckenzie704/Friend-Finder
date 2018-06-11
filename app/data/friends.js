@@ -1,0 +1,89 @@
+var path = require("path");
+//DATA VARIABLES 
+
+
+let friends = [
+    {
+        "name":"Ahmed",
+        "photo":"https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/6/005/064/1bd/3435aa3.jpg",
+        "scores":[
+            5,
+            1,
+            4,
+            4,
+            5,
+            1,
+            2,
+            5,
+            4,
+            1
+          ]
+    },
+    {
+        "name":"Purple",
+        "photo":"a",
+        "scores":[
+            5,
+            1,
+            4,
+            4,
+            5,
+            1,
+            2,
+            5,
+            4,
+            1
+          ]
+    },
+    {
+        "name":"Apple",
+        "photo":"a",
+        "scores":[
+            7,
+            2,
+            5,
+            3,
+            9,
+            1,
+            3,
+            3,
+            5,
+            1
+          ]
+    },
+    {
+        "name":"Orange",
+        "photo":"b",
+        "scores":[
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ]
+    },
+    {
+        "name":"Purple",
+        "photo":"a",
+        "scores":[
+            6,
+            4,
+            4,
+            7,
+            3,
+            8,
+            2,
+            9,
+            1,
+            1
+          ]
+    },
+]
+
+module.exports = friends;
+

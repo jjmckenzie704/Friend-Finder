@@ -158,8 +158,37 @@
     <br>
 </div>
 
+<!-- Friend Result Modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="matchModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Best Match</h4>
+            </div>
+            <div class="modal-body">
+                <h2><span id="bestMatchName"></span></h2>
+                <span id="bestMatchImage"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
+
+let currentURL = window.location.origin;
+
+let counts = [];
+
+function getSum(total, num) {
+    return total + num;
+}
+
 $(".submit").on("click", function(event) {
+    // Does not refresh the page after submit
     event.preventDefault();
 
     var newFriend = {
@@ -179,15 +208,37 @@ $(".submit").on("click", function(event) {
     ]
     };
 
-    console.log(newFriend);
+    //console.log(newFriend);
 
-    // This line is the magic. It"s very similar to the standard ajax function we used.
-    // Essentially we give it a URL, we give it the object we want to send, then we have a "callback".
-    // The callback is the response of the server. In our case, we set up code in api-routes that "returns" true or false
-    // depending on if a tables is available or not.
+    // Get existing friends
+    $.ajax({ url: currentURL + "/api/friends", method: "GET"   
+    }).then(function(friendsData) {   // Existing friends is stored in this variable
 
-    $.post("/api/friends", newFriend,
-    function(data) {
+    //conmpare newest friend with existing friends and get the best match 
+    let newFriendScore = newFriend.scores.reduce(getSum);   // For new friend, get a total score sum instead of an array of scores
+
+        for (key in friendsData) {   // For each existing friend, get their total score sum instead of an array of scores
+            let friendScore = friendsData[key].scores.reduce(getSum);
+            counts.push(friendScore);
+        }
+
+        let bestMatch = counts.reduce((prev, curr) => Math.abs(curr - newFriendScore) < Math.abs(prev - newFriendScore) ? curr : prev);   // ES6 arrow function to compare number to an array of numbers and return closest match, borrowed from https://stackoverflow.com/a/35000557/7303317
+        
+        if (counts.includes(bestMatch)) {   // Search for the array index location of the best match score
+            friendMatch = friendsData[counts.indexOf(bestMatch)];  // The best match is stored in this variable
+        }
+    //display best match on modal
+    $('#bestMatchName').text(friendMatch.name);
+        $('#bestMatchImage').html('<img src="' + friendMatch.photo + '" style="max-width: 100%">');
+        $('#matchModal').modal('show');
+    
+    //merger newest friend in existing firends list
+    //happens last so new friend will not compare against themselves
+    $.post("/api/friends", newFriend, function(data) {
+            console.log('Friend Added!');
+        });
+
+    })
 
         // Clear the form when submitting
         $("#name").val("");
@@ -203,13 +254,7 @@ $(".submit").on("click", function(event) {
         $("#q9").val("");
         $("#q10").val("");
 
-
-    });
 });
-
-
 </script>
-
-
 </body>
 </html>
